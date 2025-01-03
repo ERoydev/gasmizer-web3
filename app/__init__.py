@@ -10,8 +10,10 @@ def create_app():
     api = Api(app)
     CORS(app)  # Enable Cross-Origin Resource Sharing
 
+    network = "Ethereum" # Default network on initialization, oracle_service has a request to change it.
+
     api.add_resource(HelloWorld, "/")
-    api.add_resource(GetGasPrices, "/gas/")
-    api.add_resource(GetGasHistory, "/gas-history/")
+    api.add_resource(GetGasPrices, "/<string:network>/gas-prices/")
+    api.add_resource(GetGasHistory, "/<string:network>/gas-history/")
 
     return app

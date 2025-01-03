@@ -6,27 +6,27 @@ from ..utils.response_schema import return_json_response
 
 class OwlracleAPI:
     NETWORKS = {
-        "eth": "Ethereum",
-        "bsc": "Binance Smart Chain",
-        "poly": "Polygon",
-        "avax": "Avalanche",
-        "arb": "Arbitrum",
-        "opt": "Optimism",
-        "ftm": "Fantom",
-        "cro": "Cronos",
-        "base": "Base",
-        "aurora": "Aurora",
-        "celo": "Celo",
-        "movr": "Moonriver",
-        "linea": "Linea",
-        "blast": "Blast",
-        "one": "Harmony",
-        "goerli": "Goerli",
-        "sepolia": "Sepolia",
-        "pulse": "PulseChain",
+        "Ethereum": "eth",
+        "Binance Smart Chain": "bsc",
+        "Polygon": "poly",
+        "Avalanche": "avax",
+        "Arbitrum": "arb",
+        "Optimism": "opt",
+        "Fantom": "ftm",
+        "Cronos": "cro",
+        "Base": "base",
+        "Aurora": "aurora",
+        "Celo": "celo",
+        "Moonriver": "movr",
+        "Linea": "linea",
+        "Blast": "blast",
+        "Harmony": "one",
+        "Goerli": "goerli",
+        "Sepolia": "sepolia",
+        "PulseChain": "pulse"
     }
 
-    def __init__(self, network=NETWORKS["eth"]):
+    def __init__(self, network=NETWORKS["Ethereum"]):
         self.network = network
         self.api_key = config('OWLRACLE_API_KEY')
 
@@ -46,6 +46,7 @@ class OwlracleAPI:
         api_url = f'https://api.owlracle.info/v4/{self.network}/history'
 
         res = requests.get(api_url)
+
         if res.status_code == 200:
             data = res.json()
             return return_json_response(f"Gas history fetched successfully.", data, 200)
@@ -53,5 +54,12 @@ class OwlracleAPI:
         else:
             return return_json_response(f"Failed to fetch gas history.", {}, 500)
 
-    def change_network(self, network):
+    def post_change_network(self, network):
+        if network not in self.NETWORKS:
+            return return_json_response(
+                f"Invalid network. Available networks: {', '.join(self.NETWORKS.keys())}",
+                {},
+                400,)
+
         self.network = network
+        return return_json_response(f"Network changed successfully.", {}, 200)
