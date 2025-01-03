@@ -1,17 +1,28 @@
-from flask_restful import Resource
-from .services import get_gas_price, get_gas_prediction, oracle_interaction
+from flask_restful import Resource, Api, reqparse, fields, marshal_with, abort
+from .services.oracle_service import OwlracleAPI
+from flask import request
 
-class GasPrice(Resource):
+class GetGasPrices(Resource):
     def get(self):
-        price = get_gas_price()  # Call the function to fetch gas prices
-        return price
+        oracle_instance = OwlracleAPI()
+        gas_prices = oracle_instance.get_gas_prices()
+        return gas_prices
 
-class GasPrediction(Resource):
+class GetGasHistory(Resource):
     def get(self):
-        prediction = get_gas_prediction()  # Call the function to predict gas fee windows
-        return prediction
+        oracle_instance = OwlracleAPI()
+        gas_history = oracle_instance.get_gas_history()
+        return gas_history
 
-class GetOracle(Resource):
+class ChooseNetwork(Resource):
+    def post(self):
+        data = request.get_json() # Get Json data from the body
+        network_name = data.get('network_name')
+        
+        oracle_instance = OwlracleAPI()
+        oracle_instance.change_network()
+
+
+class HelloWorld(Resource):
     def get(self):
-        prediction = oracle_interaction()
-        return prediction
+        return "Hello, World!"

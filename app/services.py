@@ -12,9 +12,9 @@ def get_gas_prediction():
     # Example: Basic prediction logic (this can be replaced with AI models later)
     return {"prediction": "Best time to transact is from 10 PM to 2 AM."}
 
-def oracle_interaction():
-    network = 'eth'; # could be any supported network
+def get_gas_prices():
+    network = 'eth' # could be any supported network
     key = config('OWLRACLE_API_KEY')
-    res = requests.get('https://api.owlracle.info/v4/{}/gas?apikey={}'.format(network, key))
+    res = requests.get(f'https://api.owlracle.info/v4/{network}/gas?apikey={key}')
     data = res.json()
     print(data)
